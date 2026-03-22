@@ -1,0 +1,10 @@
+version: 2
+
+models:
+  - name: raw_holidays
+    description: 内閣府の「国民の祝日」CSVの生データ（祝日・振替休日を含む）
+    columns:
+      - name: date
+        description: 日付
+      - name: holiday_name
+        description: 祝日名（振替休日は「休日」と記載）

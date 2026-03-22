@@ -1,0 +1,5 @@
+[project]
+name = "dataset-calendar"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = ["frozen-ducklake", "dbt-core>=1.11.2", "dbt-duckdb>=1.10.0"]

@@ -1,0 +1,105 @@
+version: 2
+
+models:
+  - name: mart_calendar
+    description: 1955年〜2027年の日本の暦データ（祝日・曜日・和暦・会計年度）
+    access: public
+    config:
+      contract:
+        enforced: true
+    meta:
+      title: "日本の暦データ"
+      tags: ["カレンダー", "祝日", "和暦", "日付"]
+      license: "CC-BY"
+      license_url: "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html"
+      source_url: "https://www8.cao.go.jp/chosei/shukujitsu/gaiyou.html"
+      published: true
+    columns:
+      - name: date
+        data_type: DATE
+        meta:
+          title: 日付
+          description: 主キー (1955-01-01〜2027-12-31)
+      - name: year
+        data_type: INTEGER
+        meta:
+          title: 年
+      - name: month
+        data_type: INTEGER
+        meta:
+          title: 月
+      - name: day
+        data_type: INTEGER
+        meta:
+          title: 日
+      - name: weekday_code
+        data_type: INTEGER
+        meta:
+          title: 曜日コード
+          description: "ISO 8601: 月曜=1〜日曜=7"
+      - name: weekday
+        data_type: VARCHAR
+        meta:
+          title: 曜日
+          description: 月曜日〜日曜日
+      - name: is_holiday
+        data_type: BOOLEAN
+        meta:
+          title: 祝日フラグ
+          description: 国民の祝日 (振替休日を含まない)
+      - name: holiday_name
+        data_type: VARCHAR
+        meta:
+          title: 祝日名
+          description: 祝日でない場合はNULL
+      - name: is_substitute_holiday
+        data_type: BOOLEAN
+        meta:
+          title: 振替休日フラグ
+      - name: is_sat
+        data_type: BOOLEAN
+        meta:
+          title: 土曜フラグ
+      - name: is_sun
+        data_type: BOOLEAN
+        meta:
+          title: 日曜フラグ
+      - name: is_sat_sun
+        data_type: BOOLEAN
+        meta:
+          title: 土日フラグ
+      - name: is_sat_sun_holiday
+        data_type: BOOLEAN
+        meta:
+          title: 土日祝フラグ
+          description: 土曜・日曜・祝日・振替休日のいずれか
+      - name: is_weekday
+        data_type: BOOLEAN
+        meta:
+          title: 平日フラグ
+          description: 土日祝でない日
+      - name: fiscal_year
+        data_type: INTEGER
+        meta:
+          title: 会計年度
+          description: "4月始まり (例: 2020-03-31 → 2019)"
+      - name: fiscal_quarter
+        data_type: INTEGER
+        meta:
+          title: 会計四半期
+          description: "Q1=4〜6月, Q2=7〜9月, Q3=10〜12月, Q4=1〜3月"
+      - name: wareki_era
+        data_type: VARCHAR
+        meta:
+          title: 和暦元号
+          description: 明治/大正/昭和/平成/令和
+      - name: wareki_year
+        data_type: INTEGER
+        meta:
+          title: 和暦年
+          description: 元号内の年数
+      - name: wareki_label
+        data_type: VARCHAR
+        meta:
+          title: 和暦ラベル
+          description: "例: 令和2年"
