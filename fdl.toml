@@ -1,7 +1,18 @@
 name = "calendar"
 
-[storage]
+[targets.default]
+url = "s3://${FDL_S3_BUCKET}"
 public_url = "https://data.queria.io"
+s3_endpoint = "${FDL_S3_ENDPOINT}"
+s3_access_key_id = "${FDL_S3_ACCESS_KEY_ID}"
+s3_secret_access_key = "${FDL_S3_SECRET_ACCESS_KEY}"
 
-[remotes]
-origin = "s3://${FDL_S3_BUCKET}"
+[meta]
+title = "日本の暦データ"
+description = "1955年〜2027年の日付スパインに祝日・曜日・和暦・会計年度を付与した日本の暦データ"
+cover = "📅"
+tags = ['カレンダー', '祝日', '和暦', '日付']
+repository_url = "https://github.com/flo8s/dataset-calendar"
+
+[meta.schemas]
+main.title = "メイン"
