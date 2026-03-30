@@ -194,7 +194,7 @@ dependencies = [
 requires-dist = [
     { name = "dbt-core", specifier = ">=1.11.2" },
     { name = "dbt-duckdb", specifier = ">=1.10.0" },
-    { name = "frozen-ducklake", specifier = ">=0.5.0,<0.6.0" },
+    { name = "frozen-ducklake", specifier = ">=0.5.0" },
 ]
 
 [[package]]
