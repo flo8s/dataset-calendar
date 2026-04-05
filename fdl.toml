@@ -20,6 +20,7 @@ description = "1955年〜2027年の日付スパインに祝日・曜日・和暦
 cover = "📅"
 tags = ['カレンダー', '祝日', '和暦', '日付']
 repository_url = "https://github.com/flo8s/dataset-calendar"
+schedule = "yearly"
 
 [meta.schemas]
 main.title = "メイン"
