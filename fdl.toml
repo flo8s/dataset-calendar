@@ -13,6 +13,8 @@ url = "~/.local/share/fdl"
 public_url = "http://localhost:4001"
 
 [meta]
+license = "政府標準利用規約 第2.0版"
+license_url = "https://www.cao.go.jp/notice/rule.html"
 title = "日本の暦データ"
 description = "1955年〜2027年の日付スパインに祝日・曜日・和暦・会計年度を付与した日本の暦データ"
 cover = "📅"
