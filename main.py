@@ -1,36 +1,53 @@
-"""祝日 CSV 取得 + dbt ビルド + メタデータ生成パイプライン。"""
+"""祝日 CSV 取得 + dbt build + snapshot パイプライン。
 
+Snapshot must run in the SAME Python process as dbt build — see
+dataset-shared/README.md for the constraint detail.
+"""
+
+from __future__ import annotations
+
+import importlib.util
+import os
+import sys
 import urllib.request
 from pathlib import Path
 
 from dbt.cli.main import dbtRunner
 
 CSV_URL = "https://www8.cao.go.jp/chosei/shukujitsu/syukujitsu.csv"
-FDL_DIR = Path(".fdl")
-CSV_PATH = FDL_DIR / "holidays.csv"
+CACHE_DIR = Path(".cache")
+CSV_PATH = CACHE_DIR / "holidays.csv"
+
+SHARED_SCRIPTS = Path(__file__).resolve().parent / "shared" / "scripts"
+_spec = importlib.util.spec_from_file_location(
+    "snapshot_to_r2", SHARED_SCRIPTS / "snapshot-to-r2.py"
+)
+assert _spec and _spec.loader
+snapshot_to_r2 = importlib.util.module_from_spec(_spec)
+_spec.loader.exec_module(snapshot_to_r2)
 
 
-def main():
+def main() -> None:
+    target = os.environ.get("DBT_TARGET", sys.argv[1] if len(sys.argv) > 1 else "default")
+
     _download_holidays()
 
     dbt = dbtRunner()
+    for cmd in (
+        ["deps"],
+        ["build", "--target", target],
+        ["docs", "generate", "--target", target],
+    ):
+        result = dbt.invoke(cmd)
+        if not result.success:
+            raise SystemExit(f"dbt {' '.join(cmd)} failed")
 
-    result = dbt.invoke(["deps"])
-    if not result.success:
-        raise SystemExit("dbt deps failed")
-
-    result = dbt.invoke(["run"])
-    if not result.success:
-        raise SystemExit("dbt run failed")
-
-    result = dbt.invoke(["docs", "generate"])
-    if not result.success:
-        raise SystemExit("dbt docs generate failed")
+    snapshot_to_r2.run(target)
 
 
 def _download_holidays() -> None:
     """内閣府の祝日 CSV をダウンロードし UTF-8 に変換して保存する。"""
-    FDL_DIR.mkdir(exist_ok=True)
+    CACHE_DIR.mkdir(exist_ok=True)
     with urllib.request.urlopen(CSV_URL) as resp:
         data = resp.read()
     text = data.decode("cp932")
